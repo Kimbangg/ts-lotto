@@ -1,0 +1,118 @@
+.switch {
+  position: relative;
+  z-index: 0;
+}
+
+.switch > input {
+  position: absolute;
+  top: -8px;
+  right: 6px;
+  z-index: -1;
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  border-radius: 50%;
+  outline: none;
+  transform: scale(1);
+  opacity: 0;
+  transition: opacity 0.3s 0.1s, transform 0.2s 0.1s;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: none;
+}
+
+/* Span */
+.switch > span {
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Track */
+.switch > span::before {
+  display: inline-block;
+  float: right;
+  width: 36px;
+  height: 14px;
+  margin: 5px 0 5px 10px;
+  vertical-align: top;
+  background-color: rgba(0, 0, 0, 0.38);
+  border-radius: 7px;
+  transition: background-color 0.2s, opacity 0.2s;
+  content: '';
+}
+
+.switch > span::after {
+  position: absolute;
+  top: 2px;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  transition: background-color 0.2s, transform 0.2s;
+  content: '';
+}
+
+.switch > input:checked {
+  right: -10px;
+  background-color: rgb(0, 188, 212);
+}
+
+.switch > input:checked + span::before {
+  background-color: rgba(0, 188, 212, 0.6);
+}
+
+.switch > input:checked + span::after {
+  background-color: rgb(0, 188, 212);
+  transform: translateX(16px);
+}
+
+/* Hover, Focus */
+.switch:hover > input {
+  opacity: 0.04;
+}
+
+.switch > input:focus {
+  opacity: 0.12;
+}
+
+.switch:hover > input:focus {
+  opacity: 0.16;
+}
+
+.switch > input:active {
+  transform: scale(0);
+  opacity: 1;
+  transition: transform 0s, opacity 0s;
+}
+
+.switch > input:active + span::before {
+  background-color: rgba(0, 188, 212, 0.6);
+}
+
+.switch > input:checked:active + span::before {
+  background-color: rgba(0, 0, 0, 0.38);
+}
+
+.switch > input:disabled {
+  opacity: 0;
+}
+
+.switch > input:disabled + span {
+  color: black;
+  cursor: default;
+  opacity: 0.38;
+}
+
+.switch > input:disabled + span::before {
+  background-color: rgba(0, 0, 0, 0.38);
+}
+
+.switch > input:checked:disabled + span::before {
+  background-color: rgba(0, 188, 212, 0.6);
+}

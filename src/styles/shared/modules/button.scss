@@ -1,0 +1,18 @@
+.btn {
+  min-width: 64px;
+  height: 36px;
+  padding: 0 16px;
+  border-style: none;
+  border-radius: 4px;
+  outline: 0;
+  cursor: pointer;
+}
+
+.btn-cyan {
+  background-color: #00bcd4 !important;
+  border-color: #00bcd4 !important;
+}
+
+.btn.btn-cyan:hover {
+  background-color: #018c9e !important;
+}
