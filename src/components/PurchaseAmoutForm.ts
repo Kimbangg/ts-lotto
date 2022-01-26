@@ -2,6 +2,10 @@ import { $, clearInputValue, disable } from '@/utils/DOM';
 import { BaseComponent } from '@/core/Component';
 import { PUCHASE_ALERT_MESSAGE, PURCAHSE_RULE } from '@/constants/lotto';
 
+interface TicketProps {
+  setTickets: (ticketCount: number) => void;
+}
+
 const isValidInput = (purchaseAmount: number) => {
   const { SALE_UNIT, MINIMUN_PRICE } = PURCAHSE_RULE;
   const { IS_INVALID_AMOUNT, IS_LOWER_THAN_MINIMUM_AMOUNT } = PUCHASE_ALERT_MESSAGE;
@@ -26,7 +30,10 @@ const isValidInput = (purchaseAmount: number) => {
   };
 };
 
-export class PurchaseAmountForm extends BaseComponent<HTMLFormElement> {
+export class PurchaseAmountForm extends BaseComponent<HTMLElement, TicketProps> {
+  $purchaseInput: HTMLInputElement;
+  $purchaseButton: HTMLButtonElement;
+
   setEvent() {
     this.addEvent('submit', '#purchase-amount-form', event => {
       event.preventDefault();
@@ -34,34 +41,38 @@ export class PurchaseAmountForm extends BaseComponent<HTMLFormElement> {
     });
   }
 
-  requestValidInput($purchaseInput: HTMLInputElement, errorMessage: string) {
-    alert(errorMessage);
-    clearInputValue($purchaseInput);
-    $purchaseInput.focus();
+  selectDom() {
+    this.$purchaseInput = $('#purchase-amount-input')! as HTMLInputElement;
+    this.$purchaseButton = $('#purchase-amount-button')! as HTMLButtonElement;
   }
 
-  deactivate($purchaseAmountInput: HTMLInputElement, $purchaseAmountButton: HTMLButtonElement) {
-    disable($purchaseAmountInput);
-    disable($purchaseAmountButton);
+  requestValidInput(errorMessage: string) {
+    alert(errorMessage);
+    clearInputValue(this.$purchaseInput);
+    this.$purchaseInput.focus();
+  }
+
+  deactivate() {
+    disable(this.$purchaseInput);
+    disable(this.$purchaseButton);
   }
 
   onSubmitPurchaseAmount() {
-    const $purchaseInput = $('#purchase-amount-input')! as HTMLInputElement;
-    const $purchaseButton = $('#purchase-amount-button')! as HTMLButtonElement;
-
-    const purchaseAmount = Number($purchaseInput.value);
+    const { setTickets } = this.props;
+    const purchaseAmount = Number(this.$purchaseInput.value);
 
     const { isError, errorMessage } = isValidInput(purchaseAmount);
 
     if (isError) {
-      this.requestValidInput($purchaseInput, errorMessage);
+      this.requestValidInput(errorMessage);
     }
 
-    this.setState({
-      isPurchased: true,
-      purchaseAmount: purchaseAmount / PURCAHSE_RULE.SALE_UNIT,
-    });
+    // TODO : 잔돈이 있는 경우 =>  [ 잔돈 : 얼마, 구매한 티켓 수 : 몇 장 ] 을 보여주는 로직을 추가하자.
 
-    this.deactivate($purchaseInput, $purchaseButton);
+    const purchasedTicketCount = purchaseAmount / PURCAHSE_RULE.SALE_UNIT;
+
+    setTickets(purchasedTicketCount);
+
+    this.deactivate();
   }
 }
