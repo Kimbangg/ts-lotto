@@ -7,8 +7,9 @@ export default class App extends BaseComponent<HTMLElement> {
   setup() {
     this.state = {
       purchaseAmount: 0,
+      purchaseMode: 'auto',
       isPurchased: false,
-      tickets: [],
+      lottoTickets: [],
     };
   }
 
