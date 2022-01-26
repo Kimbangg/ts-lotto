@@ -3,16 +3,18 @@ import { checkSame } from '@/utils/json';
 export interface Props {}
 export interface State {}
 
-export abstract class BaseComponent<
-  T extends HTMLElement,
-  P extends Props = Props,
-  S extends State = State
-> {
+export abstract class BaseComponent<T extends HTMLElement, P = Props, S = State> {
+  $target: T;
+  props: P;
   state: S;
 
-  constructor(protected $target: T, protected props?: P) {
-    this.state = {}! as S;
+  constructor($target: T, props?: P) {
+    this.$target = $target;
+    this.state = {} as S;
+    this.props = props! as P;
+
     this.setup();
+    this.selectDom();
     this.setEvent();
     this.initialState();
   }
@@ -22,6 +24,8 @@ export abstract class BaseComponent<
   }
 
   protected setup() {}
+
+  protected selectDom() {}
 
   protected template() {
     return '';
@@ -46,7 +50,7 @@ export abstract class BaseComponent<
 
     if (checkSame(this.state, nextState)) return;
 
-    this.state = nextState;
+    this.state = { ...this.state, ...newState };
 
     this.render();
   }
