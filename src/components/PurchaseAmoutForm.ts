@@ -1,13 +1,13 @@
 import { $, clearInputValue, disable } from '@/utils/DOM';
 import { BaseComponent } from '@/core/Component';
-import { PUCHASE_ALERT_MESSAGE, PURCAHSE_RULE } from '@/constants/lotto';
+import { PUCHASE_ALERT_MESSAGE, LOTTO } from '@/constants/lotto';
 
 interface TicketProps {
   setTickets: (ticketCount: number) => void;
 }
 
 const isValidInput = (purchaseAmount: number) => {
-  const { SALE_UNIT, MINIMUN_PRICE } = PURCAHSE_RULE;
+  const { SALE_UNIT, MINIMUN_PRICE } = LOTTO;
   const { IS_INVALID_AMOUNT, IS_LOWER_THAN_MINIMUM_AMOUNT } = PUCHASE_ALERT_MESSAGE;
 
   if (purchaseAmount % SALE_UNIT) {
@@ -69,7 +69,7 @@ export class PurchaseAmountForm extends BaseComponent<HTMLElement, TicketProps> 
 
     // TODO : 잔돈이 있는 경우 =>  [ 잔돈 : 얼마, 구매한 티켓 수 : 몇 장 ] 을 보여주는 로직을 추가하자.
 
-    const purchasedTicketCount = purchaseAmount / PURCAHSE_RULE.SALE_UNIT;
+    const purchasedTicketCount = purchaseAmount / LOTTO.SALE_UNIT;
 
     setTickets(purchasedTicketCount);
 
