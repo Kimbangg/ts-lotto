@@ -1,3 +1,4 @@
+import { WinningNumbersInput } from './components/WinningNumbersInput';
 import '@/styles/index.scss';
 import { LottoTicketDisplay } from './components/LottoTicketDisplay';
 import { PurchaseAmountForm } from './components/PurchaseAmoutForm';
@@ -9,7 +10,6 @@ interface Props {}
 interface State {
   purchaseAmount: number;
   purchaseMode: string;
-  isPurchased: boolean;
   lottoTickets: Array<Number[]>;
 }
 
@@ -18,27 +18,37 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     this.state = {
       purchaseAmount: 0,
       purchaseMode: 'auto',
-      isPurchased: false,
       lottoTickets: [],
     };
   }
 
   componentDidMount() {
-    const { setTickets } = this;
+    const { isPurchased, setTickets } = this;
     const { lottoTickets } = this.state;
 
     new PurchaseAmountForm({
       setTickets: setTickets.bind(this),
     });
 
-    new LottoTicketDisplay({});
+    new LottoTicketDisplay({
+      isPurchased: isPurchased,
+      lottoTickets: lottoTickets,
+    });
+
+    new WinningNumbersInput({
+      isPurchased: isPurchased,
+      lottoTickets: lottoTickets,
+    });
   }
 
   setTickets(ticketCount: number) {
     this.setState({
       ...this.state,
       lottoTickets: Array.from({ length: ticketCount }, generateLottoNumbers)! as Number[][],
-      isPurchased: true,
     });
+  }
+
+  get isPurchased() {
+    return this.state.lottoTickets.length > 0;
   }
 }
