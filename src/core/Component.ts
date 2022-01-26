@@ -3,13 +3,11 @@ import { checkSame } from '@/utils/json';
 export interface Props {}
 export interface State {}
 
-export abstract class BaseComponent<T extends HTMLElement, P = Props, S = State> {
-  $target: T;
+export abstract class BaseComponent<T extends HTMLElement = HTMLElement, P = Props, S = State> {
   props: P;
   state: S;
 
-  constructor($target: T, props?: P) {
-    this.$target = $target;
+  constructor(props?: P) {
     this.state = {} as S;
     this.props = props! as P;
 
@@ -55,12 +53,12 @@ export abstract class BaseComponent<T extends HTMLElement, P = Props, S = State>
     this.render();
   }
 
-  addEvent(eventType: string, selector: string, cbFn: (event: any) => void) {
-    const children = [...this.$target.querySelectorAll(selector)];
+  addEvent($target: T, eventType: string, selector: string, cbFn: (event: any) => void) {
+    const children = [...$target.querySelectorAll(selector)];
 
     const isTarget = (target: any) => children.includes(target) || target.closest(selector);
 
-    this.$target.addEventListener(eventType, event => {
+    $target.addEventListener(eventType, event => {
       event.preventDefault();
       if (!isTarget(event.target)) return false;
       cbFn(event);
