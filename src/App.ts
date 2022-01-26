@@ -1,10 +1,19 @@
 import '@/styles/index.scss';
+import { LottoTicketDisplay } from './components/LottoTicketDisplay';
 import { PurchaseAmountForm } from './components/PurchaseAmoutForm';
 import { BaseComponent } from './core/Component';
-import { $ } from './utils/DOM';
 import generateLottoNumbers from './utils/generateLottoTicket';
 
-export default class App extends BaseComponent<HTMLElement> {
+interface Props {}
+
+interface State {
+  purchaseAmount: number;
+  purchaseMode: string;
+  isPurchased: boolean;
+  lottoTickets: Array<Number[]>;
+}
+
+export default class App extends BaseComponent<HTMLElement, Props, State> {
   setup() {
     this.state = {
       purchaseAmount: 0,
@@ -16,17 +25,19 @@ export default class App extends BaseComponent<HTMLElement> {
 
   componentDidMount() {
     const { setTickets } = this;
+    const { lottoTickets } = this.state;
 
     new PurchaseAmountForm({
       setTickets: setTickets.bind(this),
     });
 
-    // new LottoTicketDisplay();
+    new LottoTicketDisplay({});
   }
 
   setTickets(ticketCount: number) {
     this.setState({
-      lottoTickets: Array.from({ length: ticketCount }, generateLottoNumbers),
+      ...this.state,
+      lottoTickets: Array.from({ length: ticketCount }, generateLottoNumbers)! as Number[][],
       isPurchased: true,
     });
   }
