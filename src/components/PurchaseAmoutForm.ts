@@ -30,18 +30,20 @@ const isValidInput = (purchaseAmount: number) => {
   };
 };
 
-export class PurchaseAmountForm extends BaseComponent<HTMLElement, TicketProps> {
+export class PurchaseAmountForm extends BaseComponent<HTMLFormElement, TicketProps> {
   $purchaseInput: HTMLInputElement;
   $purchaseButton: HTMLButtonElement;
+  $purchaseForm: HTMLFormElement;
 
   setEvent() {
-    this.addEvent('submit', '#purchase-amount-form', event => {
+    this.addEvent(this.$purchaseForm, 'submit', '#purchase-amount-form', event => {
       event.preventDefault();
       this.onSubmitPurchaseAmount();
     });
   }
 
   selectDom() {
+    this.$purchaseForm = $('#purchase-amount-form')! as HTMLFormElement;
     this.$purchaseInput = $('#purchase-amount-input')! as HTMLInputElement;
     this.$purchaseButton = $('#purchase-amount-button')! as HTMLButtonElement;
   }

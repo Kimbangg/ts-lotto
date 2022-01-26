@@ -16,11 +16,12 @@ export default class App extends BaseComponent<HTMLElement> {
 
   componentDidMount() {
     const { setTickets } = this;
-    const purchaseForm = $('#purchase-amount-form')! as HTMLFormElement;
 
-    new PurchaseAmountForm(purchaseForm, {
+    new PurchaseAmountForm({
       setTickets: setTickets.bind(this),
     });
+
+    // new LottoTicketDisplay();
   }
 
   setTickets(ticketCount: number) {
