@@ -22,3 +22,17 @@ body {
   width: 30px;
   height: 36px;
 }
+
+#purchased-lotto-section__display {
+  margin-top: 15px;
+}
+
+#purchase-result-section__lotto {
+  display: flex;
+
+  &-number {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    font-size: 23px;
+  }
+}
