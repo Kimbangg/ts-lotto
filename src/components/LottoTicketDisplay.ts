@@ -1,5 +1,5 @@
 import { BaseComponent } from '@/core/Component';
-import { $, hide, show } from '@/utils/DOM';
+import { $, $$, hide, show } from '@/utils/DOM';
 
 type DisplayState = 'withNumber' | 'withoutNumber';
 
@@ -45,7 +45,7 @@ export class LottoTicketDisplay extends BaseComponent<HTMLElement, Props> {
       ? this.$purchasedLottoDisplay.classList.add('flex-col')
       : this.$purchasedLottoDisplay.classList.remove('flex-col');
 
-    const allLottoTickets = document.$$('#purchase-result-section__lotto');
+    const allLottoTickets = $$('#purchase-result-section__lotto');
 
     displayState === 'withNumber'
       ? allLottoTickets.forEach((ticket, idx) => {
