@@ -67,6 +67,7 @@ export class PurchaseAmountForm extends BaseComponent<HTMLFormElement, TicketPro
 
     if (isError) {
       this.requestValidInput(errorMessage);
+      return;
     }
 
     // TODO : 잔돈이 있는 경우 =>  [ 잔돈 : 얼마, 구매한 티켓 수 : 몇 장 ] 을 보여주는 로직을 추가하자.
