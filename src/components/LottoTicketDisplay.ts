@@ -45,7 +45,7 @@ export class LottoTicketDisplay extends BaseComponent<HTMLElement, Props> {
       ? this.$purchasedLottoDisplay.classList.add('flex-col')
       : this.$purchasedLottoDisplay.classList.remove('flex-col');
 
-    const allLottoTickets = document.querySelectorAll('#purchase-result-section__lotto');
+    const allLottoTickets = document.$$('#purchase-result-section__lotto');
 
     displayState === 'withNumber'
       ? allLottoTickets.forEach((ticket, idx) => {
