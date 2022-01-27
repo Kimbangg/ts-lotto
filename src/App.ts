@@ -11,6 +11,7 @@ interface State {
   purchaseAmount: number;
   purchaseMode: string;
   lottoTickets: Array<Number[]>;
+  isToggleClicked: boolean;
 }
 
 export default class App extends BaseComponent<HTMLElement, Props, State> {
@@ -19,12 +20,13 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       purchaseAmount: 0,
       purchaseMode: 'auto',
       lottoTickets: [],
+      isToggleClicked: false,
     };
   }
 
   componentDidMount() {
-    const { isPurchased, setTickets } = this;
-    const { lottoTickets } = this.state;
+    const { isPurchased, setTickets, setIsToggleClicked } = this;
+    const { lottoTickets, isToggleClicked } = this.state;
 
     new PurchaseAmountForm({
       setTickets: setTickets.bind(this),
@@ -33,6 +35,8 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     new LottoTicketDisplay({
       isPurchased: isPurchased,
       lottoTickets: lottoTickets,
+      isToggleClicked: isToggleClicked,
+      setIsToggleClicked: setIsToggleClicked.bind(this),
     });
 
     new WinningNumbersInput({
@@ -45,6 +49,15 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     this.setState({
       ...this.state,
       lottoTickets: Array.from({ length: ticketCount }, generateLottoNumbers)! as Number[][],
+    });
+  }
+
+  setIsToggleClicked() {
+    const { isToggleClicked } = this.state;
+
+    this.setState({
+      ...this.state,
+      isToggleClicked: !isToggleClicked,
     });
   }
 
