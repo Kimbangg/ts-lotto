@@ -7,14 +7,14 @@ interface Props {
 }
 
 export class LottoTicketDisplay extends BaseComponent<HTMLElement, Props> {
-  $ticketDisplaySection: HTMLElement;
-  $ticketCountLabel: HTMLLabelElement;
-  $purchasedTickets: HTMLDivElement;
+  $purchasedLottoSection: HTMLElement;
+  $purchasedLottoLabel: HTMLLabelElement;
+  $purchasedLottoDisplay: HTMLDivElement;
 
   selectDom() {
-    this.$ticketDisplaySection = $('#ticket-display-section')! as HTMLElement;
-    this.$ticketCountLabel = $('#ticket-count-label')! as HTMLLabelElement;
-    this.$purchasedTickets = $('#purchased-tickets')! as HTMLDivElement;
+    this.$purchasedLottoSection = $('#purchased-lotto-section')! as HTMLElement;
+    this.$purchasedLottoLabel = $('#purchased-lotto-section__label')! as HTMLLabelElement;
+    this.$purchasedLottoDisplay = $('#purchased-lotto-section__display')! as HTMLDivElement;
   }
 
   setEvent() {
@@ -23,15 +23,16 @@ export class LottoTicketDisplay extends BaseComponent<HTMLElement, Props> {
 
   render() {
     const { isPurchased, lottoTickets } = this.props;
+    const amoutOfTickets = lottoTickets.length;
 
     if (!isPurchased) {
-      hide(this.$ticketDisplaySection);
+      hide(this.$purchasedLottoSection);
     } else {
-      show(this.$ticketDisplaySection);
+      show(this.$purchasedLottoSection);
     }
 
     // lottoTicket의 길이만큼 스티커 템플릿을 생성 => 토클이 눌리면 번호와 함께 제공하는 방식으로 변경
 
-    this.$ticketCountLabel.textContent = `총 ${lottoTickets.length}개를 구매하였습니다.`;
+    this.$purchasedLottoLabel.textContent = `총 ${amoutOfTickets}개를 구매하였습니다.`;
   }
 }
