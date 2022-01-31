@@ -10,3 +10,10 @@ export const PUCHASE_ALERT_MESSAGE = {
   IS_INVALID_AMOUNT: `로또는 ${LOTTO.SALE_UNIT}원 단위로만 구매할 수 있습니다`,
   IS_LOWER_THAN_MINIMUM_AMOUNT: `값은 ${LOTTO.MINIMUN_PRICE} 이상 이어야 합니다.`,
 };
+
+export const WINNING_INPUT_ALERT_MESSAGE = {
+  EMPTY_INPUT_NUMBER: '빈 입력 값이 존재 합니다.',
+  OUT_OF_RANGE: '1 ~ 45 사이의 숫자만 가능합니다.',
+  DUPLICATED_NUMBER: '중복된 숫자가 존재합니다.',
+  VALID_WINNING_INPUT_NUMBER: '정상적으로 입력하셨습니다.',
+};
