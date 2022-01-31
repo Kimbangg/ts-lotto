@@ -5,7 +5,7 @@ import { $, $$, hide, show } from '@/utils/DOM';
 interface Props {
   isPurchased: boolean;
   lottoTickets: Array<Number[]>;
-  setLottoResult: (winningLottoNumber: Number[], bonusNumber: number) => void;
+  setLottoResult: (winningLottoNumber: number[], bonusNumber: number) => void;
 }
 
 const isEmptyValue = (value: number | string) => value === '';

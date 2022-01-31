@@ -12,7 +12,7 @@ interface State {
   purchaseMode: string;
   lottoTickets: Array<Number[]>;
   isToggleClicked: boolean;
-  winningResult: Number[];
+  winningResult: Number[]; // 보너스가 있는 경우를 어떻게 구분하면 좋을지가 고민이네
 }
 
 export default class App extends BaseComponent<HTMLElement, Props, State> {
@@ -51,7 +51,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
   setTickets(ticketCount: number) {
     this.setState({
       ...this.state,
-      lottoTickets: Array.from({ length: ticketCount }, generateLottoNumbers)! as Number[][],
+      lottoTickets: Array.from({ length: ticketCount }, generateLottoNumbers)! as number[][],
     });
   }
 
@@ -64,22 +64,11 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     });
   }
 
-  setLottoResult(winningLottoNumber: Number[]) {
-    const { lottoTickets } = this.state;
-    const winningResult: Number[] = [];
-
-    lottoTickets.forEach(lottoTicket => {
-      const matchedLottoCount = this.matchLottoNumber(lottoTicket, winningLottoNumber);
-      winningResult.push(matchedLottoCount);
-    });
-
-    this.setState({
-      ...this.state,
-      winningResult,
-    });
+  setLottoResult(winningLottoNumber: number[], bonusNumber: number) {
+    // 새로 만들지 않더라도, 결과적으로 보너스넘버를 추가하여 돌리는 경우가 필요하다.
   }
 
-  matchLottoNumber(lottoTicket: Number[], winningNumber: Number[]): Number {
+  matchLottoNumber(lottoTicket: number[], winningNumber: number[]): number {
     let matchedLottoCount = 0;
 
     lottoTicket.forEach((number, idx) => {
