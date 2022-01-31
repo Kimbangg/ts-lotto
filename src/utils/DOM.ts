@@ -8,3 +8,6 @@ export const hide = ($target: HTMLElement) => $target.classList.add('d-none');
 
 export const disable = ($target: HTMLInputElement | HTMLButtonElement) => ($target.disabled = true);
 export const enable = ($target: HTMLInputElement | HTMLButtonElement) => ($target.disabled = false);
+
+export const close = ($target: HTMLElement) => $target.classList.remove('open');
+export const open = ($target: HTMLElement) => $target.classList.add('open');
