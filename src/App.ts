@@ -12,6 +12,7 @@ interface State {
   purchaseMode: string;
   lottoTickets: Array<Number[]>;
   isToggleClicked: boolean;
+  winningResult: Number[];
 }
 
 export default class App extends BaseComponent<HTMLElement, Props, State> {
@@ -21,11 +22,12 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       purchaseMode: 'auto',
       lottoTickets: [],
       isToggleClicked: false,
+      winningResult: [],
     };
   }
 
   componentDidMount() {
-    const { isPurchased, setTickets, setIsToggleClicked } = this;
+    const { isPurchased, setTickets, setIsToggleClicked, setLottoResult } = this;
     const { lottoTickets, isToggleClicked } = this.state;
 
     new PurchaseAmountForm({
@@ -42,6 +44,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     new WinningNumbersInput({
       isPurchased: isPurchased,
       lottoTickets: lottoTickets,
+      setLottoResult: setLottoResult.bind(this),
     });
   }
 
@@ -59,6 +62,31 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       ...this.state,
       isToggleClicked: !isToggleClicked,
     });
+  }
+
+  setLottoResult(winningLottoNumber: Number[]) {
+    const { lottoTickets } = this.state;
+    const winningResult: Number[] = [];
+
+    lottoTickets.forEach(lottoTicket => {
+      const matchedLottoCount = this.matchLottoNumber(lottoTicket, winningLottoNumber);
+      winningResult.push(matchedLottoCount);
+    });
+
+    this.setState({
+      ...this.state,
+      winningResult,
+    });
+  }
+
+  matchLottoNumber(lottoTicket: Number[], winningNumber: Number[]): Number {
+    let matchedLottoCount = 0;
+
+    lottoTicket.forEach((number, idx) => {
+      if (number === winningNumber[idx]) matchedLottoCount += 1;
+    });
+
+    return matchedLottoCount;
   }
 
   get isPurchased() {
