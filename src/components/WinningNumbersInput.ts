@@ -1,3 +1,4 @@
+import { disable, enable } from './../utils/DOM';
 import { LOTTO, WINNING_INPUT_ALERT_MESSAGE } from '@/constants/lotto';
 import { BaseComponent } from '@/core/Component';
 import { $, $$, hide, show } from '@/utils/DOM';
@@ -100,10 +101,10 @@ export class WinningNumbersInput extends BaseComponent<HTMLElement, Props> {
 
     if (isError) {
       $winningErrorMessage.style.color = 'red';
-      $winningSubmitButton.disabled = true;
+      disable($winningSubmitButton);
     } else {
       $winningErrorMessage.style.color = 'green';
-      $winningSubmitButton.disabled = false;
+      enable($winningSubmitButton);
     }
 
     $winningErrorMessage.textContent = errorMessage;
