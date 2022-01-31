@@ -129,7 +129,7 @@ export class WinningNumbersInput extends BaseComponent<HTMLElement, Props> {
   }
 
   render() {
-    const { isPurchased, lottoTickets } = this.props;
+    const { isPurchased } = this.props;
     isPurchased === false ? hide(this.$winningInputForm) : show(this.$winningInputForm);
   }
 }
