@@ -4,15 +4,16 @@ import { LottoTicketDisplay } from './components/LottoTicketDisplay';
 import { PurchaseAmountForm } from './components/PurchaseAmoutForm';
 import { BaseComponent } from './core/Component';
 import generateLottoNumbers from './utils/generateLottoTicket';
+import { WinningResultDisplay } from './components/WinningResultDisplay';
 
 interface Props {}
 
 interface State {
   purchaseAmount: number;
   purchaseMode: string;
-  lottoTickets: Array<Number[]>;
+  lottoTickets: Array<number[]>;
   isToggleClicked: boolean;
-  winningResult: Number[]; // 보너스가 있는 경우를 어떻게 구분하면 좋을지가 고민이네
+  winningResult: number[]; // 보너스가 있는 경우를 어떻게 구분하면 좋을지가 고민이네
 }
 
 export default class App extends BaseComponent<HTMLElement, Props, State> {
@@ -27,8 +28,8 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
   }
 
   componentDidMount() {
-    const { isPurchased, setTickets, setIsToggleClicked, setLottoResult } = this;
-    const { lottoTickets, isToggleClicked } = this.state;
+    const { isPurchased, setTickets, setIsToggleClicked, setLottoResult, hasWinningResult } = this;
+    const { lottoTickets, isToggleClicked, winningResult } = this.state;
 
     new PurchaseAmountForm({
       setTickets: setTickets.bind(this),
@@ -45,6 +46,11 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       isPurchased: isPurchased,
       lottoTickets: lottoTickets,
       setLottoResult: setLottoResult.bind(this),
+    });
+
+    new WinningResultDisplay({
+      winningResult,
+      hasWinningResult,
     });
   }
 
@@ -65,10 +71,28 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
   }
 
   setLottoResult(winningLottoNumber: number[], bonusNumber: number) {
-    // 새로 만들지 않더라도, 결과적으로 보너스넘버를 추가하여 돌리는 경우가 필요하다.
+    const { lottoTickets } = this.state;
+    const winningResult: number[] = [];
+
+    lottoTickets.forEach(lottoTicket => {
+      let matchedLottoCount = this.countMatchedNumber(lottoTicket, winningLottoNumber);
+
+      if (matchedLottoCount === 5) {
+        this.isAddedBonusNumber(lottoTicket, bonusNumber)
+          ? (matchedLottoCount = 7)
+          : matchedLottoCount;
+      }
+
+      winningResult.push(matchedLottoCount);
+    });
+
+    this.setState({
+      ...this.state,
+      winningResult,
+    });
   }
 
-  matchLottoNumber(lottoTicket: number[], winningNumber: number[]): number {
+  countMatchedNumber(lottoTicket: number[], winningNumber: number[]): number {
     let matchedLottoCount = 0;
 
     lottoTicket.forEach((number, idx) => {
@@ -78,7 +102,19 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     return matchedLottoCount;
   }
 
+  isAddedBonusNumber(lottoTicket: number[], bonusNumber: number) {
+    if (lottoTicket.includes(bonusNumber)) {
+      return false;
+    }
+
+    return true;
+  }
+
   get isPurchased() {
     return this.state.lottoTickets.length > 0;
+  }
+
+  get hasWinningResult() {
+    return this.state.winningResult.length > 0;
   }
 }
