@@ -6,10 +6,12 @@ import { BaseComponent } from './core/Component';
 import generateLottoNumbers from './utils/generateLottoTicket';
 import { WinningResultDisplay } from './components/WinningResultDisplay';
 import { RANK_FOR_MATCHED_COUNT } from './constants/lotto';
+import { LottoStage } from '@/types/lotto';
 
 interface Props {}
 
 interface State {
+  lottoStage: LottoStage;
   purchaseAmount: number;
   purchaseMode: string;
   lottoTickets: Array<number[]>;
@@ -20,6 +22,7 @@ interface State {
 export default class App extends BaseComponent<HTMLElement, Props, State> {
   setup() {
     this.state = {
+      lottoStage: 'BEFORE_PURCHASED',
       purchaseAmount: 0,
       purchaseMode: 'auto',
       lottoTickets: [],
@@ -30,7 +33,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
 
   componentDidMount() {
     const { isPurchased, setTickets, setIsToggleClicked, setLottoResult, hasWinningResult } = this;
-    const { lottoTickets, isToggleClicked, winningResult } = this.state;
+    const { lottoTickets, isToggleClicked, winningResult, lottoStage } = this.state;
 
     new PurchaseAmountForm({
       setTickets: setTickets.bind(this),
@@ -50,6 +53,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     });
 
     new WinningResultDisplay({
+      lottoStage,
       winningResult,
       hasWinningResult,
     });
@@ -58,6 +62,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
   setTickets(ticketCount: number) {
     this.setState({
       ...this.state,
+      lottoStage: 'TICKET_ISSUE_COMPLETED',
       lottoTickets: Array.from({ length: ticketCount }, generateLottoNumbers)! as number[][],
     });
   }
@@ -67,6 +72,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
 
     this.setState({
       ...this.state,
+      lottoStage: 'TOGGLE_CHANGED',
       isToggleClicked: !isToggleClicked,
     });
   }
@@ -85,12 +91,15 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
 
       if (ranking !== undefined) {
         winningResult[ranking] ? (winningResult[ranking] += 1) : (winningResult[ranking] = 1);
+      } else {
+        winningResult[0] ? (winningResult[0] += 1) : (winningResult[0] = 1);
       }
     });
 
     this.setState({
       ...this.state,
       winningResult,
+      lottoStage: 'WINNING_NUMBER_SUBMITED',
     });
   }
 
