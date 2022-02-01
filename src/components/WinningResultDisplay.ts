@@ -26,7 +26,21 @@ export class WinningResultDisplay extends BaseComponent<HTMLElement, Props> {
     };
   }
 
+  clearResultModalView() {
+    const length = Object.entries(NAME_FOR_LOTTO_RANK).length;
+
+    for (let i = 1; i <= length; i++) {
+      const eleName = NAME_FOR_LOTTO_RANK[String(i)];
+
+      const $elem = $(eleName)! as HTMLTableElement;
+
+      $elem.textContent = '0개';
+    }
+  }
+
   updateResultModalView() {
+    this.clearResultModalView();
+
     const { winningResult } = this.props;
 
     const winningResultArr = Object.entries(winningResult);
