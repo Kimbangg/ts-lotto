@@ -24,3 +24,11 @@ export const RANK_FOR_MATCHED_COUNT: Record<number, number> = {
   4: 4,
   3: 5,
 };
+
+export const NAME_FOR_LOTTO_RANK: Record<string, string> = {
+  '1': '#first-rank',
+  '2': '#second-rank',
+  '3': '#third-rank',
+  '4': '#fourth-rank',
+  '5': '#fifth-rank',
+};
