@@ -82,9 +82,10 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
         ];
 
       ranking = ranking === 3 && lottoTicket.includes(bonusNumber) ? 2 : ranking;
-      ranking && winningResult[ranking]
-        ? (winningResult[ranking] += 1)
-        : (winningResult[ranking] = 1);
+
+      if (ranking !== undefined) {
+        winningResult[ranking] ? (winningResult[ranking] += 1) : (winningResult[ranking] = 1);
+      }
     });
 
     this.setState({
