@@ -1,4 +1,4 @@
-export type LottoState =
+export type LottoStage =
   | 'BEFORE_PURCHASED'
   | 'TICKET_ISSUE_COMPLETED'
   | 'TOGGLE_CHANGED'
