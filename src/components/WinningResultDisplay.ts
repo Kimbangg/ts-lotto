@@ -1,8 +1,10 @@
 import { $, open, close } from './../utils/DOM';
 import { BaseComponent } from '@/core/Component';
 import { NAME_FOR_LOTTO_RANK } from '@/constants/lotto';
+import { LottoStage } from '@/types/lotto';
 
 interface Props {
+  lottoStage: LottoStage;
   winningResult: Record<number, number>;
   hasWinningResult: boolean;
 }
@@ -16,10 +18,24 @@ export class WinningResultDisplay extends BaseComponent<HTMLElement, Props> {
     this.$resultDisplayModal = $('#result-display-modal')! as HTMLDivElement;
   }
 
+  setEvent() {
+    const { $modalClose, $resultDisplayModal } = this;
+
+    $modalClose.onclick = () => {
+      close($resultDisplayModal);
+    };
+  }
+
   updateResultModalView() {
     const { winningResult } = this.props;
 
-    Object.entries(winningResult).forEach(result => {
+    const winningResultArr = Object.entries(winningResult);
+
+    if (winningResultArr.length === 1 && winningResultArr[0][0] === '0') {
+      return;
+    }
+
+    winningResultArr.forEach(result => {
       const eleName = NAME_FOR_LOTTO_RANK[result[0]];
       const $elem = $(eleName)! as HTMLTableElement;
 
@@ -29,9 +45,12 @@ export class WinningResultDisplay extends BaseComponent<HTMLElement, Props> {
 
   render() {
     const { $resultDisplayModal } = this;
-    const { hasWinningResult } = this.props;
+    const { lottoStage, hasWinningResult } = this.props;
 
     this.updateResultModalView();
-    hasWinningResult ? open($resultDisplayModal) : close($resultDisplayModal);
+
+    hasWinningResult && lottoStage === 'WINNING_NUMBER_SUBMITED'
+      ? open($resultDisplayModal)
+      : close($resultDisplayModal);
   }
 }
