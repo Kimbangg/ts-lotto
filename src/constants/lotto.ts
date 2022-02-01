@@ -17,3 +17,10 @@ export const WINNING_INPUT_ALERT_MESSAGE = {
   DUPLICATED_NUMBER: '중복된 숫자가 존재합니다.',
   VALID_WINNING_INPUT_NUMBER: '정상적으로 입력하셨습니다.',
 };
+
+export const RANK_FOR_MATCHED_COUNT: Record<number, number> = {
+  6: 1,
+  5: 3,
+  4: 4,
+  3: 5,
+};
