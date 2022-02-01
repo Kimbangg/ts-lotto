@@ -5,6 +5,7 @@ import { PurchaseAmountForm } from './components/PurchaseAmoutForm';
 import { BaseComponent } from './core/Component';
 import generateLottoNumbers from './utils/generateLottoTicket';
 import { WinningResultDisplay } from './components/WinningResultDisplay';
+import { RANK_FOR_MATCHED_COUNT } from './constants/lotto';
 
 interface Props {}
 
@@ -13,7 +14,7 @@ interface State {
   purchaseMode: string;
   lottoTickets: Array<number[]>;
   isToggleClicked: boolean;
-  winningResult: number[]; // 보너스가 있는 경우를 어떻게 구분하면 좋을지가 고민이네
+  winningResult: Record<number, number>;
 }
 
 export default class App extends BaseComponent<HTMLElement, Props, State> {
@@ -23,7 +24,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       purchaseMode: 'auto',
       lottoTickets: [],
       isToggleClicked: false,
-      winningResult: [],
+      winningResult: {},
     };
   }
 
@@ -72,18 +73,18 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
 
   setLottoResult(winningLottoNumber: number[], bonusNumber: number) {
     const { lottoTickets } = this.state;
-    const winningResult: number[] = [];
+    const winningResult: Record<number, number> = {};
 
     lottoTickets.forEach(lottoTicket => {
-      let matchedLottoCount = this.countMatchedNumber(lottoTicket, winningLottoNumber);
+      let ranking =
+        RANK_FOR_MATCHED_COUNT[
+          winningLottoNumber.filter(number => lottoTicket.includes(number)).length
+        ];
 
-      if (matchedLottoCount === 5) {
-        this.isAddedBonusNumber(lottoTicket, bonusNumber)
-          ? (matchedLottoCount = 7)
-          : matchedLottoCount;
-      }
-
-      winningResult.push(matchedLottoCount);
+      ranking = ranking === 3 && lottoTicket.includes(bonusNumber) ? 2 : ranking;
+      ranking && winningResult[ranking]
+        ? (winningResult[ranking] += 1)
+        : (winningResult[ranking] = 1);
     });
 
     this.setState({
@@ -92,29 +93,11 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     });
   }
 
-  countMatchedNumber(lottoTicket: number[], winningNumber: number[]): number {
-    let matchedLottoCount = 0;
-
-    lottoTicket.forEach((number, idx) => {
-      if (number === winningNumber[idx]) matchedLottoCount += 1;
-    });
-
-    return matchedLottoCount;
-  }
-
-  isAddedBonusNumber(lottoTicket: number[], bonusNumber: number) {
-    if (lottoTicket.includes(bonusNumber)) {
-      return false;
-    }
-
-    return true;
-  }
-
   get isPurchased() {
     return this.state.lottoTickets.length > 0;
   }
 
   get hasWinningResult() {
-    return this.state.winningResult.length > 0;
+    return Object.entries(this.state.winningResult).length > 0;
   }
 }

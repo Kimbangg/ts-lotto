@@ -2,7 +2,7 @@ import { $, open, close } from './../utils/DOM';
 import { BaseComponent } from '@/core/Component';
 
 interface Props {
-  winningResult: number[];
+  winningResult: Record<number, number>;
   hasWinningResult: boolean;
 }
 
@@ -13,24 +13,13 @@ export class WinningResultDisplay extends BaseComponent<HTMLElement, Props> {
     this.$resultDisplayModal = $('#result-display-modal')! as HTMLDivElement;
   }
 
-  // setResultDisplay() {
-  //   const resultObj: any = {};
-  //   const { winningResult } = this.props;
-
-  //   winningResult.forEach(number => {
-  //     resultObj[number] = resultObj[number] ? (resultObj[number] += 1) : (resultObj[number] = 0);
-  //   });
-
-  //   for (const key of resultObj) {
-  //     const $elem = $('.')
-  //   }
-  // }
+  updateResultModalView() {}
 
   render() {
     const { hasWinningResult } = this.props;
     const { $resultDisplayModal } = this;
 
-    // this.setResultDisplay();
+    this.updateResultModalView();
     hasWinningResult ? open($resultDisplayModal) : close($resultDisplayModal);
   }
 }
