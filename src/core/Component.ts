@@ -44,9 +44,9 @@ export abstract class BaseComponent<T extends HTMLElement = HTMLElement, P = Pro
   protected setEvent() {}
 
   protected setState(newState: S) {
-    const nextState = { ...this.state, ...newState };
+    // const nextState = { ...this.state, ...newState };
 
-    if (checkSame(this.state, nextState)) return;
+    // if (checkSame(this.state, nextState)) return;
 
     this.state = { ...this.state, ...newState };
 
