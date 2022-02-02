@@ -79,10 +79,10 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     });
   }
 
-  setLottoResult(winningLottoNumber: number[], bonusNumber: number) {
+  setLottoResult(winningLottoNumberInput: number[], bonusNumber: number) {
     const { lottoTickets } = this.state;
     const winningResult: Record<number, number> = {};
-    const winningLottoNumber = [...winningLottoNumber, bonusNumber];
+    const winningLottoNumber = [...winningLottoNumberInput, bonusNumber];
 
     lottoTickets.forEach(lottoTicket => {
       let ranking =
