@@ -16,7 +16,7 @@ interface State {
   purchaseMode: string;
   lottoTickets: Array<number[]>;
   isToggleClicked: boolean;
-  winningNumbers: number[];
+  winningLottoNumber: number[];
   winningResult: Record<number, number>;
 }
 
@@ -28,7 +28,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       purchaseMode: 'auto',
       lottoTickets: [],
       isToggleClicked: false,
-      winningNumbers: [],
+      winningLottoNumber: [],
       winningResult: {},
     };
   }
@@ -82,7 +82,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
   setLottoResult(winningLottoNumber: number[], bonusNumber: number) {
     const { lottoTickets } = this.state;
     const winningResult: Record<number, number> = {};
-    const winningNumbers = [...winningLottoNumber, bonusNumber];
+    const winningLottoNumber = [...winningLottoNumber, bonusNumber];
 
     lottoTickets.forEach(lottoTicket => {
       let ranking =
@@ -101,8 +101,8 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
 
     this.setState({
       ...this.state,
-      winningNumbers,
       winningResult,
+      winningLottoNumber,
       lottoStage: 'WINNING_NUMBER_SUBMITED',
     });
   }
