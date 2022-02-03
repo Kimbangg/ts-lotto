@@ -7,15 +7,18 @@ interface Props {
   lottoStage: LottoStage;
   winningResult: Record<number, number>;
   hasWinningResult: boolean;
+  winningYield: number;
 }
 
 export class WinningResultDisplay extends BaseComponent<HTMLElement, Props> {
   $modalClose: HTMLDivElement;
   $resultDisplayModal: HTMLDivElement;
+  $winningYield: HTMLParagraphElement;
 
   selectDom() {
     this.$modalClose = $('.modal-close')! as HTMLDivElement;
     this.$resultDisplayModal = $('#result-display-modal')! as HTMLDivElement;
+    this.$winningYield = $('#winningYield')! as HTMLParagraphElement;
   }
 
   setEvent() {
@@ -41,30 +44,28 @@ export class WinningResultDisplay extends BaseComponent<HTMLElement, Props> {
   updateResultModalView() {
     this.clearResultModalView();
 
-    const { winningResult } = this.props;
+    const { winningResult, winningYield } = this.props;
 
-    const winningResultArr = Object.entries(winningResult);
-
-    if (winningResultArr.length === 1 && winningResultArr[0][0] === '0') {
-      return;
-    }
-
-    winningResultArr.forEach(result => {
+    Object.entries(winningResult).forEach(result => {
       const eleName = NAME_FOR_LOTTO_RANK[result[0]];
-      const $elem = $(eleName)! as HTMLTableElement;
 
-      $elem.textContent = `${result[1]}개`;
+      if (eleName) {
+        const $elem = $(eleName)! as HTMLTableElement;
+        $elem.textContent = `${result[1]}개`;
+      }
     });
+
+    this.$winningYield.textContent = `당신의 총 수익률은 ${winningYield}% 입니다.`;
   }
 
   render() {
     const { $resultDisplayModal } = this;
     const { lottoStage, hasWinningResult } = this.props;
 
-    this.updateResultModalView();
-
     hasWinningResult && lottoStage === 'WINNING_NUMBER_SUBMITED'
       ? open($resultDisplayModal)
       : close($resultDisplayModal);
+
+    this.updateResultModalView();
   }
 }
