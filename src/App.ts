@@ -1,12 +1,12 @@
-import { WinningNumbersInput } from './components/WinningNumbersInput';
 import '@/styles/index.scss';
+import generateLottoNumbers from './utils/generateLottoTicket';
+import { LottoStage } from '@/types/lotto';
+import { BaseComponent } from './core/Component';
+import { WinningNumbersInput } from './components/WinningNumbersInput';
 import { LottoTicketDisplay } from './components/LottoTicketDisplay';
 import { PurchaseAmountForm } from './components/PurchaseAmoutForm';
-import { BaseComponent } from './core/Component';
-import generateLottoNumbers from './utils/generateLottoTicket';
 import { WinningResultDisplay } from './components/WinningResultDisplay';
-import { RANK_FOR_MATCHED_COUNT, PRICE_FOR_RANK, LOTTO } from './constants/lotto';
-import { LottoStage } from '@/types/lotto';
+import { RANK_FOR_MATCHED_COUNT, PRICE_FOR_RANK, LOTTO, RANK } from './constants/lotto';
 
 interface Props {}
 
@@ -95,6 +95,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
 
   setLottoResult(winningLottoNumberParameter: number[], bonusNumber: number) {
     const { lottoTickets, purchaseAmount } = this.state;
+
     let winningYield: number = 0;
     const winningResult: Record<number, number> = {};
     const winningLottoNumber = [...winningLottoNumberParameter, bonusNumber];
@@ -106,7 +107,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
 
       let ranking = RANK_FOR_MATCHED_COUNT[matchedNumbers];
 
-      ranking = ranking === 3 && lottoTicket.includes(bonusNumber) ? 2 : ranking;
+      ranking = ranking === RANK.THIRD && lottoTicket.includes(bonusNumber) ? RANK.SECOND : ranking;
 
       if (ranking !== undefined) {
         winningResult[ranking] ? (winningResult[ranking] += 1) : (winningResult[ranking] = 1);
