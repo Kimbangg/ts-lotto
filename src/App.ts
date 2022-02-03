@@ -21,18 +21,20 @@ interface State {
   winningYield: number;
 }
 
+const initialState: State = {
+  lottoStage: 'BEFORE_PURCHASED',
+  purchaseAmount: 0,
+  purchaseMode: 'auto',
+  lottoTickets: [],
+  isToggleClicked: false,
+  winningLottoNumber: [],
+  winningResult: {},
+  winningYield: 0,
+};
+
 export default class App extends BaseComponent<HTMLElement, Props, State> {
   setup() {
-    this.state = {
-      lottoStage: 'BEFORE_PURCHASED',
-      purchaseAmount: 0,
-      purchaseMode: 'auto',
-      lottoTickets: [],
-      isToggleClicked: false,
-      winningLottoNumber: [],
-      winningResult: {},
-      winningYield: 0,
-    };
+    this.state = initialState;
   }
 
   componentDidMount() {
@@ -44,15 +46,15 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     });
 
     new LottoTicketDisplay({
-      isPurchased: isPurchased,
-      lottoTickets: lottoTickets,
-      isToggleClicked: isToggleClicked,
+      isPurchased,
+      lottoTickets,
+      isToggleClicked,
       setIsToggleClicked: setIsToggleClicked.bind(this),
     });
 
     new WinningNumbersInput({
-      isPurchased: isPurchased,
-      lottoTickets: lottoTickets,
+      isPurchased,
+      lottoTickets,
       setLottoResult: setLottoResult.bind(this),
     });
 
