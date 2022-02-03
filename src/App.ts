@@ -38,7 +38,14 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
   }
 
   componentDidMount() {
-    const { isPurchased, setTickets, setIsToggleClicked, setLottoResult, hasWinningResult } = this;
+    const {
+      isPurchased,
+      setTickets,
+      setIsToggleClicked,
+      setLottoResult,
+      hasWinningResult,
+      reStart,
+    } = this;
     const { lottoTickets, isToggleClicked, winningResult, lottoStage, winningYield } = this.state;
 
     new PurchaseAmountForm({
@@ -63,6 +70,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       winningResult,
       hasWinningResult,
       winningYield,
+      reStart: reStart.bind(this),
     });
   }
 
@@ -92,10 +100,11 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     const winningLottoNumber = [...winningLottoNumberParameter, bonusNumber];
 
     lottoTickets.forEach(lottoTicket => {
-      let ranking =
-        RANK_FOR_MATCHED_COUNT[
-          winningLottoNumber.filter(number => lottoTicket.includes(number)).length
-        ];
+      const matchedNumbers = winningLottoNumber.filter((number, idx) => {
+        if (lottoTicket[idx] === number) return true;
+      }).length;
+
+      let ranking = RANK_FOR_MATCHED_COUNT[matchedNumbers];
 
       ranking = ranking === 3 && lottoTicket.includes(bonusNumber) ? 2 : ranking;
 
@@ -114,7 +123,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       }
     });
 
-    winningYield = winningYield / (LOTTO.SALE_UNIT * purchaseAmount);
+    winningYield = (winningYield / (LOTTO.SALE_UNIT * purchaseAmount)) * 100;
 
     this.setState({
       ...this.state,
@@ -123,6 +132,10 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       winningLottoNumber,
       lottoStage: 'WINNING_NUMBER_SUBMITED',
     });
+  }
+
+  reStart() {
+    this.setState(initialState);
   }
 
   get isPurchased() {
