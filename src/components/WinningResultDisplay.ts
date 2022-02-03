@@ -1,4 +1,4 @@
-import { $, open, close } from './../utils/DOM';
+import { $, open, close, enable, clearInputValue, $$ } from './../utils/DOM';
 import { BaseComponent } from '@/core/Component';
 import { NAME_FOR_LOTTO_RANK } from '@/constants/lotto';
 import { LottoStage } from '@/types/lotto';
@@ -8,25 +8,77 @@ interface Props {
   winningResult: Record<number, number>;
   hasWinningResult: boolean;
   winningYield: number;
+  reSetLottoApp: () => void;
 }
 
 export class WinningResultDisplay extends BaseComponent<HTMLElement, Props> {
   $modalClose: HTMLDivElement;
   $resultDisplayModal: HTMLDivElement;
   $winningYield: HTMLParagraphElement;
+  $resetButton: HTMLButtonElement;
+  $purchaseInput: HTMLInputElement;
+  $purchaseButton: HTMLButtonElement;
+  $purchasedLottoToggle: HTMLInputElement;
+  $winningInputs: NodeListOf<HTMLInputElement>;
+  $bonusInput: HTMLInputElement;
+  $winningErrorMessage: HTMLParagraphElement;
 
   selectDom() {
     this.$modalClose = $('.modal-close')! as HTMLDivElement;
     this.$resultDisplayModal = $('#result-display-modal')! as HTMLDivElement;
     this.$winningYield = $('#winningYield')! as HTMLParagraphElement;
+    this.$resetButton = $('#reset-button')! as HTMLButtonElement;
+
+    // PurchaseAmoutForm
+    this.$purchaseInput = $('#purchase-amount-input')! as HTMLInputElement;
+    this.$purchaseButton = $('#purchase-amount-button')! as HTMLButtonElement;
+
+    // LottoTicketDisplay
+    this.$purchasedLottoToggle = $('#purchased-lotto-section__toggle')! as HTMLInputElement;
+
+    // WinningNumbersInput
+    this.$winningInputs = $$('.winning-number')! as NodeListOf<HTMLInputElement>;
+    this.$bonusInput = $('.bonus-number')! as HTMLInputElement;
+    this.$winningErrorMessage = $('.winning-input-form__error-message')! as HTMLParagraphElement;
+  }
+
+  clearPurchaseAmoutForm() {
+    enable(this.$purchaseInput);
+    enable(this.$purchaseButton);
+    clearInputValue(this.$purchaseInput);
+    this.$purchaseInput.focus();
+  }
+
+  clearLottoTicketDisplay() {
+    this.$purchasedLottoToggle.checked = false;
+  }
+
+  clearWinningNumbersInput() {
+    this.$winningInputs.forEach($input => {
+      clearInputValue($input);
+    });
+
+    this.$winningErrorMessage.textContent = '';
+
+    clearInputValue(this.$bonusInput);
   }
 
   setEvent() {
-    const { $modalClose, $resultDisplayModal } = this;
+    const { reSetLottoApp } = this.props;
+    const { $modalClose, $resultDisplayModal, $resetButton } = this;
 
     $modalClose.onclick = () => {
       close($resultDisplayModal);
     };
+
+    $resetButton.addEventListener('click', event => {
+      event.stopImmediatePropagation();
+      reSetLottoApp();
+      this.clearPurchaseAmoutForm();
+      this.clearLottoTicketDisplay();
+      this.clearWinningNumbersInput();
+      this.clearResultModalView();
+    });
   }
 
   clearResultModalView() {
