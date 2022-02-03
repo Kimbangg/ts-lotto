@@ -40,3 +40,11 @@ export const NAME_FOR_LOTTO_RANK: Record<string, string> = {
   '4': '#fourth-rank',
   '5': '#fifth-rank',
 };
+
+export const RANK = {
+  FIRST: 1,
+  SECOND: 2,
+  THIRD: 3,
+  FOURTH: 4,
+  FITFH: 5,
+};
