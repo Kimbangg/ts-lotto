@@ -5,7 +5,7 @@ import { PurchaseAmountForm } from './components/PurchaseAmoutForm';
 import { BaseComponent } from './core/Component';
 import generateLottoNumbers from './utils/generateLottoTicket';
 import { WinningResultDisplay } from './components/WinningResultDisplay';
-import { RANK_FOR_MATCHED_COUNT } from './constants/lotto';
+import { RANK_FOR_MATCHED_COUNT, PRICE_FOR_RANK, LOTTO } from './constants/lotto';
 import { LottoStage } from '@/types/lotto';
 
 interface Props {}
@@ -18,6 +18,7 @@ interface State {
   isToggleClicked: boolean;
   winningLottoNumber: number[];
   winningResult: Record<number, number>;
+  winningYield: number;
 }
 
 export default class App extends BaseComponent<HTMLElement, Props, State> {
@@ -30,12 +31,13 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       isToggleClicked: false,
       winningLottoNumber: [],
       winningResult: {},
+      winningYield: 0,
     };
   }
 
   componentDidMount() {
     const { isPurchased, setTickets, setIsToggleClicked, setLottoResult, hasWinningResult } = this;
-    const { lottoTickets, isToggleClicked, winningResult, lottoStage } = this.state;
+    const { lottoTickets, isToggleClicked, winningResult, lottoStage, winningYield } = this.state;
 
     new PurchaseAmountForm({
       setTickets: setTickets.bind(this),
@@ -58,12 +60,14 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       lottoStage,
       winningResult,
       hasWinningResult,
+      winningYield,
     });
   }
 
   setTickets(ticketCount: number) {
     this.setState({
       ...this.state,
+      purchaseAmount: ticketCount,
       lottoStage: 'TICKET_ISSUE_COMPLETED',
       lottoTickets: Array.from({ length: ticketCount }, generateLottoNumbers)! as number[][],
     });
@@ -79,10 +83,11 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     });
   }
 
-  setLottoResult(winningLottoNumberInput: number[], bonusNumber: number) {
-    const { lottoTickets } = this.state;
+  setLottoResult(winningLottoNumberParameter: number[], bonusNumber: number) {
+    const { lottoTickets, purchaseAmount } = this.state;
+    let winningYield: number = 0;
     const winningResult: Record<number, number> = {};
-    const winningLottoNumber = [...winningLottoNumberInput, bonusNumber];
+    const winningLottoNumber = [...winningLottoNumberParameter, bonusNumber];
 
     lottoTickets.forEach(lottoTicket => {
       let ranking =
@@ -99,8 +104,19 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       }
     });
 
+    Object.entries(winningResult).forEach(value => {
+      const price = PRICE_FOR_RANK[value[0]];
+
+      if (price) {
+        winningYield += price * value[1];
+      }
+    });
+
+    winningYield = winningYield / (LOTTO.SALE_UNIT * purchaseAmount);
+
     this.setState({
       ...this.state,
+      winningYield,
       winningResult,
       winningLottoNumber,
       lottoStage: 'WINNING_NUMBER_SUBMITED',
