@@ -25,6 +25,14 @@ export const RANK_FOR_MATCHED_COUNT: Record<number, number> = {
   3: 5,
 };
 
+export const PRICE_FOR_RANK: Record<string, number> = Object.freeze({
+  '1': 2000000000,
+  '2': 30000000,
+  '3': 1500000,
+  '4': 50000,
+  '5': 5000,
+});
+
 export const NAME_FOR_LOTTO_RANK: Record<string, string> = {
   '1': '#first-rank',
   '2': '#second-rank',
