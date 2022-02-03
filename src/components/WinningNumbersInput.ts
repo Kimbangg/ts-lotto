@@ -63,6 +63,30 @@ export class WinningNumbersInput extends BaseComponent<HTMLElement, Props> {
     this.$winningErrorMessage = $('.winning-input-form__error-message')! as HTMLParagraphElement;
   }
 
+  setEvent() {
+    const { $winningInputs, $bonusInput, $winningSubmitButton } = this;
+
+    $winningInputs.forEach($input => {
+      $input.onkeyup = event => {
+        this.onKeyUpNumberInput(event);
+      };
+    });
+
+    $bonusInput.onkeyup = event => {
+      this.onKeyUpNumberInput(event);
+    };
+
+    $winningSubmitButton.onclick = event => {
+      event.preventDefault();
+      this.onSubmitWinningNumbers();
+    };
+  }
+
+  render() {
+    const { isPurchased } = this.props;
+    isPurchased === false ? hide(this.$winningInputForm) : show(this.$winningInputForm);
+  }
+
   requestValidInput(errorMessage: string) {
     alert(errorMessage);
   }
@@ -108,29 +132,5 @@ export class WinningNumbersInput extends BaseComponent<HTMLElement, Props> {
     }
 
     $winningErrorMessage.textContent = errorMessage;
-  }
-
-  setEvent() {
-    const { $winningInputs, $bonusInput, $winningSubmitButton } = this;
-
-    $winningInputs.forEach($input => {
-      $input.onkeyup = event => {
-        this.onKeyUpNumberInput(event);
-      };
-    });
-
-    $bonusInput.onkeyup = event => {
-      this.onKeyUpNumberInput(event);
-    };
-
-    $winningSubmitButton.onclick = event => {
-      event.preventDefault();
-      this.onSubmitWinningNumbers();
-    };
-  }
-
-  render() {
-    const { isPurchased } = this.props;
-    isPurchased === false ? hide(this.$winningInputForm) : show(this.$winningInputForm);
   }
 }

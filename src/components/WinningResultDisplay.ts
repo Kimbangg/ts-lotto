@@ -42,6 +42,35 @@ export class WinningResultDisplay extends BaseComponent<HTMLElement, Props> {
     this.$winningErrorMessage = $('.winning-input-form__error-message')! as HTMLParagraphElement;
   }
 
+  setEvent() {
+    const { reSetLottoApp } = this.props;
+    const { $modalClose, $resultDisplayModal, $resetButton } = this;
+
+    $modalClose.onclick = () => {
+      close($resultDisplayModal);
+    };
+
+    $resetButton.addEventListener('click', event => {
+      event.stopImmediatePropagation();
+      reSetLottoApp();
+      this.clearPurchaseAmoutForm();
+      this.clearLottoTicketDisplay();
+      this.clearWinningNumbersInput();
+      this.clearResultModalView();
+    });
+  }
+
+  render() {
+    const { $resultDisplayModal } = this;
+    const { lottoStage, hasWinningResult } = this.props;
+
+    hasWinningResult && lottoStage === 'WINNING_NUMBER_SUBMITED'
+      ? open($resultDisplayModal)
+      : close($resultDisplayModal);
+
+    this.updateResultModalView();
+  }
+
   clearPurchaseAmoutForm() {
     enable(this.$purchaseInput);
     enable(this.$purchaseButton);
@@ -61,24 +90,6 @@ export class WinningResultDisplay extends BaseComponent<HTMLElement, Props> {
     this.$winningErrorMessage.textContent = '';
 
     clearInputValue(this.$bonusInput);
-  }
-
-  setEvent() {
-    const { reSetLottoApp } = this.props;
-    const { $modalClose, $resultDisplayModal, $resetButton } = this;
-
-    $modalClose.onclick = () => {
-      close($resultDisplayModal);
-    };
-
-    $resetButton.addEventListener('click', event => {
-      event.stopImmediatePropagation();
-      reSetLottoApp();
-      this.clearPurchaseAmoutForm();
-      this.clearLottoTicketDisplay();
-      this.clearWinningNumbersInput();
-      this.clearResultModalView();
-    });
   }
 
   clearResultModalView() {
@@ -108,16 +119,5 @@ export class WinningResultDisplay extends BaseComponent<HTMLElement, Props> {
     });
 
     this.$winningYield.textContent = `당신의 총 수익률은 ${winningYield}% 입니다.`;
-  }
-
-  render() {
-    const { $resultDisplayModal } = this;
-    const { lottoStage, hasWinningResult } = this.props;
-
-    hasWinningResult && lottoStage === 'WINNING_NUMBER_SUBMITED'
-      ? open($resultDisplayModal)
-      : close($resultDisplayModal);
-
-    this.updateResultModalView();
   }
 }

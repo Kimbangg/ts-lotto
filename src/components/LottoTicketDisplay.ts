@@ -38,6 +38,19 @@ export class LottoTicketDisplay extends BaseComponent<HTMLElement, Props> {
             </span>`;
   }
 
+  render() {
+    const { isToggleClicked, isPurchased, lottoTickets } = this.props;
+    const amoutOfTickets = lottoTickets.length;
+
+    isPurchased === false ? hide(this.$purchasedLottoSection) : show(this.$purchasedLottoSection);
+
+    this.$purchasedLottoLabel.textContent = `총 ${amoutOfTickets}개를 구매하였습니다.`;
+
+    this.$purchasedLottoDisplay.innerHTML = this.lottoTicketIconTemplate.repeat(amoutOfTickets);
+
+    isToggleClicked ? this.setLottoDisplay('withNumber') : this.setLottoDisplay('withoutNumber');
+  }
+
   setLottoDisplay(displayState: DisplayState) {
     const { lottoTickets } = this.props;
 
@@ -62,18 +75,5 @@ export class LottoTicketDisplay extends BaseComponent<HTMLElement, Props> {
             ticket.removeChild(LottoNumberSpan);
           }
         });
-  }
-
-  render() {
-    const { isToggleClicked, isPurchased, lottoTickets } = this.props;
-    const amoutOfTickets = lottoTickets.length;
-
-    isPurchased === false ? hide(this.$purchasedLottoSection) : show(this.$purchasedLottoSection);
-
-    this.$purchasedLottoLabel.textContent = `총 ${amoutOfTickets}개를 구매하였습니다.`;
-
-    this.$purchasedLottoDisplay.innerHTML = this.lottoTicketIconTemplate.repeat(amoutOfTickets);
-
-    isToggleClicked ? this.setLottoDisplay('withNumber') : this.setLottoDisplay('withoutNumber');
   }
 }
