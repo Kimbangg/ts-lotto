@@ -44,7 +44,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       setIsToggleClicked,
       setLottoResult,
       hasWinningResult,
-      reStart,
+      reSetLottoApp,
     } = this;
     const { lottoTickets, isToggleClicked, winningResult, lottoStage, winningYield } = this.state;
 
@@ -70,7 +70,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       winningResult,
       hasWinningResult,
       winningYield,
-      reStart: reStart.bind(this),
+      reSetLottoApp: reSetLottoApp.bind(this),
     });
   }
 
@@ -123,7 +123,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
       }
     });
 
-    winningYield = (winningYield / (LOTTO.SALE_UNIT * purchaseAmount)) * 100;
+    winningYield = Math.floor((winningYield / (LOTTO.SALE_UNIT * purchaseAmount)) * 100);
 
     this.setState({
       ...this.state,
@@ -134,7 +134,7 @@ export default class App extends BaseComponent<HTMLElement, Props, State> {
     });
   }
 
-  reStart() {
+  reSetLottoApp() {
     this.setState(initialState);
   }
 
